@@ -1,4 +1,4 @@
-name: My First on
+name: My First actions workflow
 
 on: push
 
