@@ -6,6 +6,9 @@ on:
 jobs:
     ascii_job:
         runs-on: ubuntu-latest
+        defaults:
+          run:
+            working-directory: ./workflows        
         steps:
         - name: checkout Repo
           uses: actions/checkout@v4
