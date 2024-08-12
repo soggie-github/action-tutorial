@@ -16,7 +16,7 @@ jobs:
           uses: actions/checkout@v4
 
         - name: Docker Build
-          run: docker  build . -t ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME}}/${{ env.IMAGE_NAME }}:test2
+          run: docker  build . -t ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME}}/${{ env.IMAGE_NAME }}:test3
 
         - name: Docker Login
           run: docker login --username=${{ vars.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_GITHUB_TOKEN }}
@@ -24,7 +24,7 @@ jobs:
         - name: Docker Publish
           run: |
              docker login -u soggiegithub -p ${{ secrets.DOCKER_GITHUB_TOKEN }}
-             docker push ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:test2
+             docker push ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:test3
     
     deploy:
         needs: docker
@@ -32,4 +32,4 @@ jobs:
         runs-on: ubuntu-latest
         steps:
         - name: Docker run
-          run: docker run -d -p 8080:80 ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:test2
+          run: docker run -d -p 8080:80 ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:test3
