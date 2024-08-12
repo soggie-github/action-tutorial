@@ -1,0 +1,35 @@
+name: Exploring Variabes and Secrets
+
+on:
+    push
+
+env:
+  CONTAINER_REGISTRY: docker.io
+  IMAGE_NAME: github-actions-nginx
+
+
+jobs:
+    docker:
+        runs-on: ubuntu-latest
+        steps:
+        - name: checkout Repo
+          uses: actions/checkout@v4
+
+        - name: Docker Build
+          run: docker  build . -t ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME}}/${{ env.IMAGE_NAME }}:test3
+
+        - name: Docker Login
+          run: docker login --username=${{ vars.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_GITHUB_TOKEN }}
+        
+        - name: Docker Publish
+          run: |
+             docker login -u soggiegithub -p ${{ secrets.DOCKER_GITHUB_TOKEN }}
+             docker push ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:test3
+    
+    deploy:
+        needs: docker
+        if: github.ref == 'refs/heads/main'
+        runs-on: ubuntu-latest
+        steps:
+        - name: Docker run
+          run: docker run -d -p 8080:80 ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:test3
