@@ -1,8 +1,10 @@
 name: Exploring Variabes and Secrets
 
 on:
-   schedule:
-    - cron: '*/1 * * * *'
+    workflow_dispatch:
+   
+   #schedule:
+    #- cron: '*/1 * * * *'
     #push
 
 env:
